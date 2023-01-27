@@ -1,0 +1,27 @@
+{
+    "hello": "Hello",
+    "exchange":"Exchange",
+    "language":"Language",
+    "english":"English",
+    "persian":"Persian",
+    "description": "this is a place for news in application       ",
+    "buy":"Buy",
+    "sell":"Sell",
+    "topMarket":"Top MarketCaps",
+    "topGainers":"Top Gainers",
+    "topLosers":"Top Losers",
+    "personalData":"Personal Data",
+    "orders":"Orders",
+    "setting":"Settings",
+    "authen":"Authentication",
+    "about":"About Us",
+    "community":"Community",
+    "marketView":"Market View",
+    "profile":"Profile"
+
+
+
+
+    
+   
+}

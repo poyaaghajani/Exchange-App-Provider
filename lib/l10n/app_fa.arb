@@ -1,0 +1,24 @@
+{
+    "hello": "سلام",
+    "exchange":"تبادل ارز",
+    "language":"زبان",
+    "english":"انگلیسی",
+    "persian":"فارسی",
+    "description": "       این یه مکان برای اخبار جدید اپلیکیشنه" ,
+    "buy":"خرید",
+    "sell":"فروش",
+    "topMarket":"بهترین های بازار",
+    "topGainers":"پر سودترین ها",
+    "topLosers":"پر ضررترین ها",
+    "personalData":"اطلاعات شخصی",
+    "orders":"سفارشات",
+    "setting":"تنضیمات",
+    "authen":"تایید اعتبار",
+    "about":"درباره ما",
+    "community":"مجموعه",
+    "marketView":"نمای مارکت",
+    "profile":"پروفایل"
+
+
+
+}
