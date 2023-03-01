@@ -13,7 +13,7 @@ import 'package:marquee/marquee.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -378,7 +378,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             'https://s2.coinmarketcap.com/static/img/coins/32x32/$tokenId.png',
                                         fit: BoxFit.fill,
                                         placeholder: (context, url) =>
-                                            const CircularProgressIndicator(),
+                                            LoadingAnimationWidget.inkDrop(
+                                          color: Color(0xff4a64fe),
+                                          size: 35,
+                                        ),
                                         errorWidget: (context, url, error) =>
                                             const Icon(Icons.error),
                                       ),
@@ -441,7 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ],
                                       ),
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             );

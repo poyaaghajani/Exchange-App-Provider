@@ -86,21 +86,9 @@ class ProfileScreen extends StatelessWidget {
                   text: AppLocalizations.of(context)!.setting,
                   icon: Icons.settings,
                 ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return SingupScreen();
-                        },
-                      ),
-                    );
-                  },
-                  child: ProfileDetail(
-                    text: AppLocalizations.of(context)!.authen,
-                    icon: Icons.mark_email_read,
-                  ),
+                ProfileDetail(
+                  text: AppLocalizations.of(context)!.authen,
+                  icon: Icons.mark_email_read,
                 ),
                 SizedBox(height: height / 80),
                 const LineSwitcher(),

@@ -34,7 +34,7 @@ class DecimalRounder {
     if (percent24! > 10000) {
       percentChange = percent24.toStringAsFixed(0);
     } else {
-      percentChange = percent24.toStringAsFixed(2);
+      percentChange = percent24.toStringAsFixed(3);
     }
     return percentChange;
   }

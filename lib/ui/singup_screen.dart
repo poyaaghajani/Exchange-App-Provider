@@ -1,6 +1,13 @@
+import 'package:exchange/models/user_model.dart';
+import 'package:exchange/network/response_model.dart';
+import 'package:exchange/providers/user_data_provider.dart';
+import 'package:exchange/ui/main_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SingupScreen extends StatefulWidget {
   const SingupScreen({super.key});
@@ -11,16 +18,15 @@ class SingupScreen extends StatefulWidget {
 
 class _SingupScreenState extends State<SingupScreen> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   bool isObscure = true;
+  late UserDataProvider userProvider;
 
   @override
   void dispose() {
     nameController.dispose();
-    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -31,6 +37,7 @@ class _SingupScreenState extends State<SingupScreen> {
     var width = MediaQuery.of(context).size.width;
     var textTheme = Theme.of(context).textTheme;
     var cardColor = Theme.of(context).cardColor;
+    userProvider = Provider.of<UserDataProvider>(context);
 
     return Directionality(
       textDirection: TextDirection.ltr,
@@ -41,7 +48,7 @@ class _SingupScreenState extends State<SingupScreen> {
           children: [
             Lottie.asset('assets/images/waveloop.json',
                 height: height * 0.2, width: width, fit: BoxFit.fill),
-            SizedBox(height: height * 0.03),
+            SizedBox(height: height * 0.05),
             Padding(
               padding: EdgeInsets.only(left: width / 20),
               child: Text(
@@ -101,36 +108,6 @@ class _SingupScreenState extends State<SingupScreen> {
                     ),
                     SizedBox(height: height * 0.02),
                     TextFormField(
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: cardColor),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: cardColor),
-                        ),
-                        prefixIcon: Icon(Icons.email, color: cardColor),
-                        hintText: 'Gmail',
-                        hintStyle: textTheme.bodySmall,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter gmail';
-                        } else if (!value.endsWith('@gmail.com')) {
-                          return 'Please enter valid gmail';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: height * 0.02),
-                    TextFormField(
                       controller: passwordController,
                       obscureText: isObscure,
                       decoration: InputDecoration(
@@ -173,19 +150,72 @@ class _SingupScreenState extends State<SingupScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(height: height * 0.02),
-                    const Text(
-                      'Creating an account means you\'re okay with our Terms of Services and our our Privacy Polity',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey,
-                        height: 1.5,
-                      ),
+                    SizedBox(height: height * 0.22),
+                    Consumer<UserDataProvider>(
+                      builder: (context, userDataProvider, child) {
+                        switch (userDataProvider.registerStatus?.status) {
+                          case Status.LOADING:
+                            return LoadingAnimationWidget.inkDrop(
+                              color: Color(0xff4a64fe),
+                              size: 35,
+                            );
+                          case Status.COMPLETED:
+                            savedLogin(userDataProvider.registerStatus?.data);
+                            WidgetsBinding.instance.addPostFrameCallback(
+                              (timeStamp) => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MainWrapper(),
+                                ),
+                              ),
+                            );
+                            return signupBtn();
+                          case Status.ERROR:
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                signupBtn(),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.error,
+                                      color: Colors.redAccent,
+                                    ),
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    Text(
+                                      userDataProvider.registerStatus!.message,
+                                      style: GoogleFonts.ubuntu(
+                                          color: Colors.redAccent,
+                                          fontSize: 15),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          default:
+                            return signupBtn();
+                        }
+                      },
                     ),
-                    SizedBox(height: height * 0.03),
-                    signupBtn(),
                   ],
+                ),
+              ),
+            ),
+            SizedBox(height: height * 0.02),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: const Text(
+                'Creating an account means you\'re okay with our Terms of Services and our our Privacy Polity',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey,
+                  height: 1.5,
                 ),
               ),
             ),
@@ -212,10 +242,20 @@ class _SingupScreenState extends State<SingupScreen> {
         ),
         onPressed: () {
           // Validate returns true if the form is valid, or false otherwise.
-          if (_formKey.currentState!.validate()) {}
+          if (_formKey.currentState!.validate()) {
+            userProvider.callRegisterApi(
+                nameController.text, passwordController.text);
+          }
         },
         child: const Text('Sign Up'),
       ),
     );
+  }
+
+  void savedLogin(UserModel model) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('user_token', model.token!);
+    prefs.setBool('loggesIn', true);
   }
 }

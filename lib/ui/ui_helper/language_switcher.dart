@@ -47,6 +47,7 @@ class LanguageSwitcher extends StatelessWidget {
                             )),
                         onTap: () {
                           languageProvider.toggleLanguageEn();
+                          Navigator.pop(context);
                         },
                         title: Text(
                           AppLocalizations.of(context)!.english,
@@ -66,6 +67,7 @@ class LanguageSwitcher extends StatelessWidget {
                         ),
                         onTap: () {
                           languageProvider.toggleLanguagePer();
+                          Navigator.pop(context);
                         },
                         title: Text(
                           AppLocalizations.of(context)!.persian,

@@ -17,11 +17,11 @@
     "about":"About Us",
     "community":"Community",
     "marketView":"Market View",
-    "profile":"Profile"
-
-
-
-
+    "profile":"Profile",
+    "watchList":"Watch List",
+    "market24":"Market in 24H",
+    "market7d":"Market in 7D",
+    "market30d":"Market in 30D"
     
    
 }

@@ -1,7 +1,6 @@
 import 'dart:async';
-
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:exchange/models/crypto_models/all_crypto_model.dart';
 import 'package:exchange/network/response_model.dart';
 import 'package:exchange/providers/market_view_provider.dart';
 import 'package:exchange/ui/ui_helper/decimal_rounder.dart';
@@ -175,14 +174,10 @@ class _MarketViewPageState extends State<MarketViewPage> {
                                                     "https://s2.coinmarketcap.com/static/img/coins/32x32/$tokenId.png",
                                                 fit: BoxFit.fill,
                                                 placeholder: (context, url) =>
-                                                    Shimmer.fromColors(
-                                                  baseColor:
-                                                      Colors.grey.shade400,
-                                                  highlightColor: Colors.white,
-                                                  child: const SizedBox(
-                                                    width: 32,
-                                                    height: 32,
-                                                  ),
+                                                    LoadingAnimationWidget
+                                                        .inkDrop(
+                                                  color: Color(0xff4a64fe),
+                                                  size: 35,
                                                 ),
                                                 errorWidget:
                                                     (context, url, error) =>
@@ -221,7 +216,6 @@ class _MarketViewPageState extends State<MarketViewPage> {
                                                 child: SvgPicture.network(
                                                   "https://s3.coinmarketcap.com/generated/sparklines/web/30d/2781/$tokenId.svg",
                                                 ))),
-                                        // Spacer(),
                                         Expanded(
                                           child: Padding(
                                             padding: const EdgeInsets.only(

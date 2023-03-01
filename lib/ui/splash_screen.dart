@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
               bottom: height / 3,
               child: Image.asset(
                 'assets/images/logo.png',
-                color: Color(0xff0005ce),
+                color: Color.fromARGB(255, 204, 204, 243),
               ),
             ),
             Positioned(

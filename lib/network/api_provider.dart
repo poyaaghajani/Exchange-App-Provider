@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 
 class ApiProvider {
   dynamic getAllCryptoData() async {
@@ -34,17 +33,14 @@ class ApiProvider {
     return response;
   }
 
-  dynamic callRegisterApi(name, email, password) async {
-    var formaData = FormData.fromMap({
-      'name': name,
-      'email': email,
+  dynamic callRegisterApi(name, password) async {
+    var formData = FormData.fromMap({
+      'identity': name,
       'password': password,
-      'password_confirmation': password,
     });
-
     final response = await Dio().post(
-      'https://besenior.ir/api/register',
-      data: formaData,
+      'http://startflutter.ir/api/collections/users/auth-with-password',
+      data: formData,
     );
     return response;
   }
